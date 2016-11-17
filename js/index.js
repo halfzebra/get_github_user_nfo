@@ -23,15 +23,20 @@ $(document).ready(function () {
             var outRepos = "";
             for (var k in dataUserRepos) {
                 var userRepos = dataUserRepos[k].name;
+                console.log(userRepos);
                 outRepos = outRepos + '<br><b>' + k + ' :' + userRepos + '<b>';
                 outputReposUser.html(outRepos);
-                console.log(userRepos);
+
+
                 f(userRepos);
+
             }
         };
 
         function f(userRepos) {
+
             var xhrReposLang = new XMLHttpRequest();
+
             xhrReposLang.open('GET', 'https://api.github.com/repos/' + userName + '/' + userRepos + '/languages', true);
             xhrReposLang.send();
             xhrReposLang.onload = function () {
@@ -39,10 +44,12 @@ $(document).ready(function () {
                 var outLang = "";
                 for (var l in dataUserLang) {
                     outLang = outLang + '<br><b>' + l + ':' + dataUserLang[l] + '</b>';
+
+                        $("#javaScrtipt").html(outLang);
+                    }
                 }
-                $("#javaScrtipt").html(outLang);
             }
-        }
+
     })
 });
   
