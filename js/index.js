@@ -11,7 +11,9 @@ $(document).ready(function () {
             var dataUser = JSON.parse(xhr.responseText);
             var out = "";
             for (var i in dataUser) {
-                out = out + '<br><b>' + i + ' :' + dataUser[i] + '<b>'
+                if ((i === 'login' || i === 'id' || i === 'name' || i === 'email') && (dataUser[i] !== null)) {
+                    out = out + '<br><b>' + i + ' :' + dataUser[i] + '<b>'
+                }
             }
             outputNfoUser.html(out);
         };
@@ -26,29 +28,24 @@ $(document).ready(function () {
                 console.log(userRepos);
                 outRepos = outRepos + '<br><b>' + k + ' :' + userRepos + '<b>';
                 outputReposUser.html(outRepos);
-
-
                 f(userRepos);
-
             }
         };
 
         function f(userRepos) {
-
             var xhrReposLang = new XMLHttpRequest();
-
             xhrReposLang.open('GET', 'https://api.github.com/repos/' + userName + '/' + userRepos + '/languages', true);
             xhrReposLang.send();
             xhrReposLang.onload = function () {
                 var dataUserLang = JSON.parse(xhrReposLang.responseText);
+                console.log(dataUserLang);
                 var outLang = "";
                 for (var l in dataUserLang) {
                     outLang = outLang + '<br><b>' + l + ':' + dataUserLang[l] + '</b>';
-
-                        $("#javaScrtipt").html(outLang);
-                    }
+                    $("#javaScrtipt").html(outLang);
                 }
             }
+        }
 
     })
 });
