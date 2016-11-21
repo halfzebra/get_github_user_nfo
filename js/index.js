@@ -23,16 +23,29 @@ $(document).ready(function () {
         xhrRepos.onload = function () {
             var dataUserRepos = JSON.parse(xhrRepos.responseText);
             var outRepos = "";
+            var outReposLang;
             for (var k in dataUserRepos) {
                 var userRepos = dataUserRepos[k].name;
                 console.log(userRepos);
                 outRepos = outRepos + '<br><b>' + k + ' :' + userRepos + '<b>';
                 outputReposUser.html(outRepos);
-                f(userRepos);
+                if (userRepos ==='get_github_user_nfo'){
+                    outReposLang = $('#1');
+                    f(userRepos ,outReposLang);
+                }
+                if (userRepos ==='bootstrap'){
+                    outReposLang = $('#2');
+                    f(userRepos ,outReposLang);
+                }
+                if (userRepos ==='post_req'){
+                    outReposLang = $('#3');
+                    f(userRepos ,outReposLang);
+                }
             }
         };
 
-        function f(userRepos) {
+
+        function f(userRepos,outReposLang) {
             var xhrReposLang = new XMLHttpRequest();
             xhrReposLang.open('GET', 'https://api.github.com/repos/' + userName + '/' + userRepos + '/languages', true);
             xhrReposLang.send();
@@ -41,10 +54,11 @@ $(document).ready(function () {
                 console.log(dataUserLang);
                 var outLang = "";
                 for (var l in dataUserLang) {
-                    outLang = outLang + '<br><b>' + l + ':' + dataUserLang[l] + '</b>';
-                    $("#javaScrtipt").html(outLang);
+                    outLang = outLang + '<br><b>' + l + ':' + dataUserLang[l]+ '</b>';
                 }
+                outReposLang.html(outLang);
             }
+
         }
 
     })
