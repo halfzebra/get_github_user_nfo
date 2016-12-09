@@ -4,6 +4,7 @@ $(document).ready(function () {
         var outputNfoUser = $('#nfo');
         var outputReposUser = $('#repository');
         var xhr = new XMLHttpRequest();
+        window.arrLang = [];
         xhr.open('GET', 'https://api.github.com/users/' + userName, true);
         xhr.send();
 
@@ -33,70 +34,90 @@ $(document).ready(function () {
                 arrDataCharts.push(dataUserRepos[k].name);
                 var userRepos = dataUserRepos[k].name;
                 outRepos = outRepos + '<br><b>' + k + ' :' + userRepos + '<b>';
-                outputReposUser.html(outRepos);
+                outputReposUser.html();
                 f(userRepos);
-
-
             }
-            function r() {
-                return console.log(arrDataCharts);
-            }r()
 
-        };
 
+            var arr = window.arrLang;
+            console.log(arr[0]);
+            console.log(arr);
+
+
+            creteChart(arrDataCharts ,window.arrLang);
+            console.log(Array.isArray(window.arrLang));
+
+        }
+
+        ;
 
 
         function f(userRepos) {
             var xhrReposLang = new XMLHttpRequest();
             xhrReposLang.open('GET', 'https://api.github.com/repos/' + userName + '/' + userRepos + '/languages', true);
             xhrReposLang.send();
+            
+
             xhrReposLang.onload = function () {
                 var dataUserLang = JSON.parse(xhrReposLang.responseText);
-                for (var l in dataUserLang) {
+                //console.log(dataUserLang);
+                //arrLang.push(dataUserLang.HTML);
+                for (var l in dataUserLang){
                     $('#lang').append('<br><b>' + l + ':' + dataUserLang[l]+ '</b>');
+                    window.arrLang.push(dataUserLang);
                 }
-            }
+
+            };
         }
 
 
+        function creteChart(dataParams) {
 
-        var ctx = document.getElementById("myChart");
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels:xhrRepos.r,
-                datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:true
-                        }
+            var ctx = document.getElementById("myChart");
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels:dataParams,
+                    datasets: [{
+                        label: '',
+                        data: (window.arrLang),
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
                     }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true
+                            }
+                        }]
+                    }
                 }
-            }
-        });
+            });
+        }
+
 
 
     });
