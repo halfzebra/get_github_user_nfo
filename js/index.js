@@ -5,9 +5,8 @@ $(document).ready(function () {
         var outputReposUser = $('#repository');
         var xhr = new XMLHttpRequest();
         window.arrLang = [];
-        xhr.open('GET', 'https://api.github.com/users/' + userName, true);
+        xhr.open('GET', 'https://api.github.com/users/' + userName );
         xhr.send();
-
         xhr.onload = function () {
             var dataUser = JSON.parse(xhr.responseText);
             var out = "";
@@ -17,62 +16,42 @@ $(document).ready(function () {
                 }
             }
             outputNfoUser.html(out);
-
         };
         var xhrRepos = new XMLHttpRequest();
-        xhrRepos.open('GET', 'https://api.github.com/users/' + userName + '/repos', true);
+        xhrRepos.open('GET', 'https://api.github.com/users/' + userName + '/repos');
         xhrRepos.send();
-        
         xhrRepos.onload=function () {
             var dataUserRepos = JSON.parse(xhrRepos.responseText);
             var outRepos = "";
             var arrDataCharts= [];
-
             for (var k in dataUserRepos) {
-
-
                 arrDataCharts.push(dataUserRepos[k].name);
                 var userRepos = dataUserRepos[k].name;
                 outRepos = outRepos + '<br><b>' + k + ' :' + userRepos + '<b>';
                 outputReposUser.html();
-                f(userRepos);
+                getUserReposLang(userRepos);
             }
-
-
-            var arr = window.arrLang;
-            console.log(arr[0]);
-            console.log(arr);
-
-
             creteChart(arrDataCharts ,window.arrLang);
             console.log(Array.isArray(window.arrLang));
+        };
 
-        }
-
-        ;
-
-
-        function f(userRepos) {
+        function getUserReposLang(userRepos) {
+            var arrReposLang=[];
             var xhrReposLang = new XMLHttpRequest();
-            xhrReposLang.open('GET', 'https://api.github.com/repos/' + userName + '/' + userRepos + '/languages', true);
+            xhrReposLang.open('GET', 'https://api.github.com/repos/' + userName + '/' + userRepos + '/languages');
             xhrReposLang.send();
-            
-
             xhrReposLang.onload = function () {
                 var dataUserLang = JSON.parse(xhrReposLang.responseText);
-                //console.log(dataUserLang);
-                //arrLang.push(dataUserLang.HTML);
+
+                arrReposLang.push(dataUserLang);
                 for (var l in dataUserLang){
                     $('#lang').append('<br><b>' + l + ':' + dataUserLang[l]+ '</b>');
                     window.arrLang.push(dataUserLang);
                 }
-
             };
+            return arrReposLang;
         }
-
-
         function creteChart(dataParams) {
-
             var ctx = document.getElementById("myChart");
             var myChart = new Chart(ctx, {
                 type: 'bar',
