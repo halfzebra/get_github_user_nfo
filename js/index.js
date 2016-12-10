@@ -32,7 +32,7 @@ $(document).ready(function () {
               var a = getUserReposLang(userRepos);
               creteChart(arrDataCharts ,a);
             }
-            console.log(a);
+
             console.log(Array.isArray(window.arrLang));
         };
         var arrReposLang=[];
@@ -51,6 +51,7 @@ $(document).ready(function () {
             return arrReposLang;
         }
         function creteChart(dataParams , langParams) {
+            console.log(langParams[0]);
             var ctx = document.getElementById("myChart");
             var myChart = new Chart(ctx, {
                 type: 'bar',
