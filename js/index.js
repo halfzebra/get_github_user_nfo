@@ -29,29 +29,28 @@ $(document).ready(function () {
                 var userRepos = dataUserRepos[k].name;
                 outRepos = outRepos + '<br><b>' + k + ' :' + userRepos + '<b>';
                 outputReposUser.html();
-                getUserReposLang(userRepos);
+              var a = getUserReposLang(userRepos);
+              creteChart(arrDataCharts ,a);
             }
-            creteChart(arrDataCharts ,window.arrLang);
+            console.log(a);
             console.log(Array.isArray(window.arrLang));
         };
-
+        var arrReposLang=[];
         function getUserReposLang(userRepos) {
-            var arrReposLang=[];
             var xhrReposLang = new XMLHttpRequest();
             xhrReposLang.open('GET', 'https://api.github.com/repos/' + userName + '/' + userRepos + '/languages');
             xhrReposLang.send();
             xhrReposLang.onload = function () {
                 var dataUserLang = JSON.parse(xhrReposLang.responseText);
-
-                arrReposLang.push(dataUserLang);
+                arrReposLang.push(dataUserLang.HTML);
                 for (var l in dataUserLang){
                     $('#lang').append('<br><b>' + l + ':' + dataUserLang[l]+ '</b>');
-                    window.arrLang.push(dataUserLang);
+
                 }
             };
             return arrReposLang;
         }
-        function creteChart(dataParams) {
+        function creteChart(dataParams , langParams) {
             var ctx = document.getElementById("myChart");
             var myChart = new Chart(ctx, {
                 type: 'bar',
@@ -59,7 +58,7 @@ $(document).ready(function () {
                     labels:dataParams,
                     datasets: [{
                         label: '',
-                        data: (window.arrLang),
+                        data: langParams,
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
                             'rgba(54, 162, 235, 0.2)',
@@ -96,11 +95,6 @@ $(document).ready(function () {
                 }
             });
         }
-
-
-
     });
-
-    
 });
   
